@@ -1,0 +1,9 @@
+{
+    "path" : "~/Ubiqum/Market Basket Analysis",
+    "sortOrder" : [
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        }
+    ]
+}

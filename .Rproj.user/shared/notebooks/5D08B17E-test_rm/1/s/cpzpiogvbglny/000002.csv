@@ -1,0 +1,15 @@
+"0","Dataset <- read.transactions(""ElectronidexTransactions2017.csv"",
+format = ""basket"", sep="","", rm.duplicates=TRUE)
+"
+"1","distribution of transactions with duplicates:
+"
+"1","items
+"
+"1","  1 "
+"1","  2 "
+"1","
+"
+"1","191 "
+"1"," 10 "
+"1","
+"

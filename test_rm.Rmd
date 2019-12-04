@@ -1,0 +1,193 @@
+---
+title: "market Basket Analysis"
+author: "Gerhard Westerbeek"
+date: "27-11-2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+``` {r echo=FALSE}
+library("arules")
+library("caTools")
+library("arulesViz")
+library("ggplot2")
+library("gcookbook")
+library("dplyr")
+library("readxl")
+library("readr")
+```
+
+
+
+#Defining the problem
+Perform a market basket analysis to help Blackwell's board of directors to better understand the clientele that Electronidex is currently serving and if Electronidex would be an optimal acquisition.
+
+Our work in that task would be:
+1. Verify if there are any interesting patterns or item relationships within Electronidex's transactions?
+2. Define if Blackwell benefit from selling any of Electronidex's items?
+3. In your opinion, should Blackwell acquire Electronidex?
+4. If Blackwell does acquire Electronidex, do you have any recommendations for Blackwell? (Ex: cross-selling items, sale promotions,      should they remove items, etc.)
+
+#Import the data
+```{r echo=TRUE}
+Dataset <- read.transactions("ElectronidexTransactions2017.csv",
+format = "basket", sep=",", rm.duplicates=TRUE)
+```
+
+# First exploration transactional data 
+The transaction data set is composed of 9835 transactions involving 125 distinct products. 
+In below graph the top 15 of the most frequently sold items of one month is presented. 
+The top 15 most frequent sold products consitst out of 9 computers (laptops included).
+```{r echo=TRUE}
+itemFrequencyPlot(Dataset,
+                  type="absolute",
+                  topN=15, # can be changed to the number of interest
+                  horiz=TRUE,
+                  col='steelblue3',
+                  xlab='',
+                  main='Item frequency, absolute')
+```
+
+#Compare dataset Blackwell and Electronidex
+In order to make a thorough comparison between the products of Blackwell and Electronidex, a categorization of the items of Electronidex has been created based on the available item list. The transaction data set is composed of 9835 transactions involving 18 categories. In below graph the frequency of transactions by category is presented.The top 3 consists out of "Desktops", "Laptops" and "Monitors". 
+
+```{r echo=FALSE}
+# Create dataframe
+library(readxl)
+Dictionarycategories <- read_xlsx("Dictionarycategories.xlsx", 
+                                   sheet = "Blad1", col_names = FALSE)
+
+names(Dictionarycategories) <- c("labels","categories")
+
+Dataset@itemInfo <- Dataset@itemInfo %>% 
+        left_join(y = Dictionarycategories, by = "labels")
+
+cat_trans <- aggregate(Dataset, by = "categories")
+summary(cat_trans)
+```
+
+
+``` {r echo=TRUE}
+itemFrequencyPlot(cat_trans,
+                  type="absolute",
+                  topN=10, 
+                  horiz=TRUE,
+                  col='steelblue3',
+                  xlab='',
+                  main='Item frequency Electronidex, absolute')
+``` 
+
+# Item Frequency Blackwell
+In below graph the frequency of transactions of Blackwell by category is presented. The top 3 consists out of "Game Console", "Printers" and "Smartphones". 
+```{r echo=TRUE}
+Sales_Blackwell <- read_excel("Sales Blackwell.xlsx", 
+                              sheet = "Existing Product List")
+Sum_Blackwell <- Sales_Blackwell %>% group_by(Product_Category)%>%
+        summarize(Total_Sales = sum(Sales_Volume))
+
+ggplot(Sum_Blackwell, aes(x = reorder(Product_Category, -Total_Sales), 
+                y = Total_Sales)) +
+  geom_col(fill = "steelblue") + coord_flip () + theme_classic() + ggtitle("Item frequency Blackwell, absolute")
+```
+
+# apriori algorithm
+The apriori algorithm function has been run with the following parameters: 
+ Support: 0.01 – meaning that we are looking for rules explaining at least 98 transactions. 
+ Confidence: 0.5 – reasonable value for the accuracy of our rules. 
+ Max Length: Not set 
+ Min Length: Not set
+
+```{r echo=TRUE}
+RulesName<- apriori (Dataset, parameter = list(supp = 0.01,
+                                                conf = 0.5))
+plot(RulesName, method = "graph", engine = "htmlwidget")
+```
+
+#Findings
+The rules were selected after inspecting the relevance of support, confidence and lift (in that order). This meant that we looked for rules relevant to plenty of transactions, high accuracy and lift greater or equal to one.
+After inspecting the most meaningful rules in the business product type subset, we can draw the following conclusion: 
+
+1. A strong rule that appears is that the combination {HP Laptop,Lenovo Desktop Computer} often implies the purchase of an {iMac}  ; 
+2. In a lot of transactions iMac is at the RHS, as a consequence of purchasing combination of Desktops and Monitors.  
+
+
+#Determine clientele Electronidex using Apriori algorithm
+In order to make a distinction between the clientele of Electronidex a basic assumption may be that companies buy multiple desktops or laptops (or a combination of both) in one single transaction. 
+Therefore a subset was created of the following items;
+"Lenovo Desktop Computer",
+"Acer Aspire",
+"Acer Desktop",
+"Alienware Laptop",
+"Apple MacBook Pro",
+"Apple MacBook Air",
+"ASUS Chromebook",
+"ASUS Desktop",
+"CYBERPOWER Gamer Desktop",
+"Dell 2 Desktop",
+"Dell Laptop",
+"HP Desktop",
+"HP Laptop",
+"HP Notebook Touchscreen Laptop PC",
+"iMac",
+"LG Touchscreen Laptop"
+
+The apriori algorithm function has been run with the following parameters: 
+ Support: 0.01 – meaning that we are looking for rules explaining at least 98 transactions. 
+ Confidence: 0.4 – reasonable value for the accuracy of our rules. 
+ Max Length: Not set 
+ Min Length: Not set
+```{r echo=TRUE}
+RulesNameSub<- apriori(Dataset, parameter = list(supp = 0.01,
+                                                        conf = 0.4)) 
+
+inspect(RulesNameSub)
+inspect(RulesNameSub)
+subset <- subset(RulesNameSub, 
+                 subset = lhs %in% c("Lenovo Desktop Computer",
+                                     "Acer Aspire",
+                                     "Acer Desktop",
+                                     "ASUS Chromebook",
+                                     "Alienware Laptop",
+                                     "Apple MacBook Pro",
+                                     "Apple MacBook Air",
+                                     # "ASUS Chromebook"))
+                                     "CYBERPOWER Gamer Desktop",
+                                     "Dell Desktop",
+                                     "Dell Laptop",
+                                     "HP Desktop",
+                                     "HP Laptop",
+                                     "HP Notebook Touchscreen Laptop PC",
+                                     "iMac",
+                                     "LG Touchscreen Laptop"))
+
+library(arules)
+library(arulesViz)
+
+plot(subset, method = "graph", engine = "htmlwidget")
+
+```
+
+#Findings clientele Electronidex
+Based on the output of the apriori algorithm it can be concluded that 7368 transactions contain multiple desktops or laptops or a combination of the two. Assuming that these are transactions related to companies, it can be concluded that the clientele of Electronidex is business related.
+
+#Conclusion
+
+
+
+
+
+
+
+
+```{r echo=TRUE}
+library(arules)
+library(arulesViz)
+
+temp_rules <- readRDS("subset_rules.rds")
+plot(subset, method = "graph", engine = "htmlwidget")
+```
+
+

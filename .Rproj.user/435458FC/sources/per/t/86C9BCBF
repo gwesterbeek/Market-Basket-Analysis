@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1574847660157.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2900431792",
+    "id" : "86C9BCBF",
+    "lastKnownWriteTime" : 1574855072,
+    "last_content_update" : 1574855072476,
+    "path" : "~/Ubiqum/Market Basket Analysis/scripts/File category_volume Blackwell.R",
+    "project_path" : "scripts/File category_volume Blackwell.R",
+    "properties" : {
+        "cursorPosition" : "19,12",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

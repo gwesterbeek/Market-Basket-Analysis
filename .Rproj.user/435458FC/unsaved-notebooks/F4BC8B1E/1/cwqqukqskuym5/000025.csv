@@ -1,0 +1,5 @@
+"0","plot(rules, method = ""grouped matrix"", engine = ""interactive"")
+"
+"2","Error in plot(rules, method = ""grouped matrix"", engine = ""interactive"") : 
+  object 'rules' not found
+"

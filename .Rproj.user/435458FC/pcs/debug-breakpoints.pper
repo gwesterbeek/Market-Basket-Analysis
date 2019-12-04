@@ -1,0 +1,21 @@
+{
+    "debugBreakpointsState" : {
+        "breakpoints" : [
+            {
+                "editor_line_number" : 11,
+                "editor_state" : 1,
+                "function_name" : "toplevel",
+                "function_steps" : "",
+                "id" : 0,
+                "is_package_breakpoint" : false,
+                "is_pending_debug_completion" : false,
+                "line_number" : 11,
+                "needs_updated_steps" : true,
+                "package_name" : "",
+                "path" : "~/Ubiqum/Market Basket Analysis/scripts/File category_volume Blackwell.R",
+                "state" : 1,
+                "type" : 1
+            }
+        ]
+    }
+}

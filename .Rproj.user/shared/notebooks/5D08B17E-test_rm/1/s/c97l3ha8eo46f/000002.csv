@@ -1,0 +1,8 @@
+"0","itemFrequencyPlot(cat_trans,"
+"0","                  type=""absolute"","
+"0","                  topN=18, "
+"0","                  horiz=TRUE,"
+"0","                  col='steelblue3',"
+"0","                  xlab='',"
+"0","                  main='Item frequency, absolute')"
+"0",""

@@ -1,0 +1,27 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1574871157397.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "6332210",
+    "id" : "9297D17E",
+    "lastKnownWriteTime" : 1575039339,
+    "last_content_update" : 1575039339848,
+    "path" : "~/Ubiqum/Market Basket Analysis/test_rm.Rmd",
+    "project_path" : "test_rm.Rmd",
+    "properties" : {
+        "cursorPosition" : "106,0",
+        "last_setup_crc32" : "",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
